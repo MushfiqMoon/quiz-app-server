@@ -19,28 +19,46 @@ const client = new MongoClient(uri);
 async function dbConnect() {
     try {
         await client.connect();
-        console.log("Database connected");
+
     } catch (error) {
-        console.log(error.name);
+        console.log(error.name, error.massage);
     }
 }
-
 dbConnect();
 
-
-
+const questionCollection = client.db('sjQuizDB').collection('questions')
 
 // endpoint
+// app.get('/', (req, res) => {
+//     res.send('Hello World!!')
+// })
 
-app.get('/', (req, res) => {
-    res.send('Hello World!!')
-})
+app.post('/quiz/question', async (req, res) => {
+    try {
+
+        const result = await questionCollection.insertOne(req.body)
+        // console.log(result)
+        if (result.insertedId) {
+            res.send({
+                sussess: true,
+                massage: "Question Created"
+            })
+        }
+        else {
+            res.send({
+                sussess: false,
+                error: "Not created"
+            })
+        }
+    }
+    catch (error) {
+        res.send({
+            sussess: false,
+            error: "Not created"
+        })
+    }
 
 
-app.get('/quiz/category', async (req, res) => {
-
-
-    res.send('all category data is loading');
 })
 
 
