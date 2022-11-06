@@ -29,9 +29,10 @@ dbConnect();
 const questionCollection = client.db('sjQuizDB').collection('questions')
 
 // endpoint
-// app.get('/', (req, res) => {
-//     res.send('Hello World!!')
-// })
+
+app.get('/', (req, res) => {
+    res.send('welcome')
+})
 
 app.post('/quiz/question', async (req, res) => {
     try {
@@ -57,8 +58,27 @@ app.post('/quiz/question', async (req, res) => {
             error: "Not created"
         })
     }
+})
 
+app.get('/quiz/question', async (req, res) => {
+    try {
 
+        const cursor = questionCollection.find({})
+        const result = await cursor.toArray()
+        console.log(result)
+        res.send({
+            sussess: true,
+            massage: "Question Created",
+            data: result
+        })
+
+    }
+    catch (error) {
+        res.send({
+            sussess: false,
+            error: "Not created"
+        })
+    }
 })
 
 
